@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { CartDrawer } from './components/CartDrawer';
@@ -151,6 +152,7 @@ function App() {
         onOpenHelpCenter={() => setIsHelpCenterOpen(true)}
         onCategoryClick={handleFooterCategoryClick}
       />
+      <SpeedInsights />
     </div>
   );
 }
