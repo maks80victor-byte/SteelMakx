@@ -15,7 +15,8 @@ import {
     DollarSign,
     Star,
     CheckCircle2,
-    AlertCircle
+    AlertCircle,
+    Upload
 } from 'lucide-react';
 import { Product, Category } from '../types';
 import { CATEGORIES } from '../constants';
@@ -208,20 +209,69 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                             {/* Media and Tags */}
                             <div className="space-y-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-400 mb-2">URL da Imagem</label>
-                                    <div className="relative">
-                                        <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                    <label className="block text-sm font-medium text-gray-400 mb-2">Imagem do Produto</label>
+
+                                    {/* Drag & Drop Zone */}
+                                    <div
+                                        className="relative border-2 border-dashed border-steel-border rounded-xl p-8 hover:border-steel-green hover:bg-steel-green/5 transition-all cursor-pointer group mb-4"
+                                        onDragOver={(e) => e.preventDefault()}
+                                        onDrop={(e) => {
+                                            e.preventDefault();
+                                            const file = e.dataTransfer.files[0];
+                                            if (file && file.type.startsWith('image/')) {
+                                                const reader = new FileReader();
+                                                reader.onload = (event) => {
+                                                    setFormData({ ...formData, image: event.target?.result as string });
+                                                };
+                                                reader.readAsDataURL(file);
+                                            }
+                                        }}
+                                        onClick={() => document.getElementById('image-upload')?.click()}
+                                    >
                                         <input
-                                            required
-                                            type="text"
-                                            value={formData.image}
-                                            onChange={e => setFormData({ ...formData, image: e.target.value })}
-                                            className="w-full bg-steel-dark/50 border border-steel-border rounded-xl pl-10 pr-4 py-3 text-white focus:outline-none focus:border-steel-green transition-colors"
-                                            placeholder="/images/products/..."
+                                            type="file"
+                                            id="image-upload"
+                                            className="hidden"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    const reader = new FileReader();
+                                                    reader.onload = (event) => {
+                                                        setFormData({ ...formData, image: event.target?.result as string });
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }}
                                         />
+                                        <div className="flex flex-col items-center justify-center text-center">
+                                            <div className="w-12 h-12 rounded-full bg-steel-dark border border-steel-border flex items-center justify-center mb-3 group-hover:scale-110 transition-transform text-steel-green">
+                                                <Upload className="w-6 h-6" />
+                                            </div>
+                                            <p className="text-sm font-bold text-white mb-1">Clique para enviar ou arraste aqui</p>
+                                            <p className="text-xs text-gray-500">JPG, PNG ou GIF (Max. 5MB)</p>
+                                        </div>
                                     </div>
+
+                                    {/* URL Fallback */}
+                                    <div className="relative mb-4">
+                                        <div className="text-xs text-gray-500 mb-1 text-center font-medium uppercase tracking-widest">OU INSIRA UMA URL</div>
+                                        <div className="relative">
+                                            <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                            <input
+                                                required
+                                                type="text"
+                                                value={formData.image}
+                                                onChange={e => setFormData({ ...formData, image: e.target.value })}
+                                                className="w-full bg-steel-dark/50 border border-steel-border rounded-xl pl-10 pr-4 py-3 text-white focus:outline-none focus:border-steel-green transition-colors text-sm"
+                                                placeholder="https://..."
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Preview */}
                                     {formData.image && (
-                                        <div className="mt-4 aspect-video rounded-xl bg-steel-dark overflow-hidden border border-steel-border">
+                                        <div className="relative aspect-video rounded-xl bg-steel-dark overflow-hidden border border-steel-border group/preview">
                                             <img
                                                 src={formData.image}
                                                 alt="Preview"
@@ -230,6 +280,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                                     (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x225?text=Preview+Indispon%C3%ADvel';
                                                 }}
                                             />
+                                            <button
+                                                type="button"
+                                                onClick={() => setFormData({ ...formData, image: '' })}
+                                                className="absolute top-2 right-2 p-2 bg-black/50 hover:bg-red-500 text-white rounded-lg transition-colors opacity-0 group-hover/preview:opacity-100"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     )}
                                 </div>
@@ -243,8 +300,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                                 key={tag}
                                                 onClick={() => handleTagToggle(tag)}
                                                 className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${formData.tags?.includes(tag)
-                                                        ? 'bg-steel-green text-white shadow-md shadow-steel-green/20'
-                                                        : 'bg-steel-card border border-steel-border text-gray-400 hover:text-white hover:border-gray-500'
+                                                    ? 'bg-steel-green text-white shadow-md shadow-steel-green/20'
+                                                    : 'bg-steel-card border border-steel-border text-gray-400 hover:text-white hover:border-gray-500'
                                                     }`}
                                             >
                                                 {tag}
