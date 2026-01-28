@@ -2,106 +2,6 @@ import { Product, Category } from './types';
 
 export const PRODUCTS: Product[] = [
   {
-    id: 1,
-    name: "Alan Wake Remastered",
-    category: Category.GAMES,
-    tags: ['Ação', 'Aventura', 'Terror', 'História'],
-    price: 99.95,
-    image: "/images/products/Alan-Wake-Remastered.webp",
-    badge: "COMPRA DIRETA",
-    rating: 4.5
-  },
-  {
-    id: 2,
-    name: "Assassin's Creed Odyssey",
-    category: Category.GAMES,
-    tags: ['RPG', 'Ação', 'Aventura', 'Mundo Aberto'],
-    price: 179.95,
-    image: "/images/products/Assassin's-Creed-Odyssey.webp",
-    badge: "GAME PASS",
-    rating: 4.8
-  },
-  {
-    id: 3,
-    name: "Assassin's Creed Valhalla",
-    category: Category.GAMES,
-    tags: ['RPG', 'Ação', 'Aventura', 'Vikings'],
-    price: 599.95,
-    image: "/images/products/Assassin's-Creed-Valhalla.webp",
-    badge: "EDIÇÃO COMPLETA",
-    rating: 4.7
-  },
-  {
-    id: 4,
-    name: "Alan Wake 2",
-    category: Category.GAMES,
-    tags: ['Terror', 'Ação', 'Aventura', 'Suspense'],
-    price: 359.90,
-    image: "/images/products/Alan-Wake-2.webp",
-    badge: "DELUXE EDITION",
-    rating: 5
-  },
-  {
-    id: 5,
-    name: "Assassin's Creed Rogue Remastered",
-    category: Category.GAMES,
-    tags: ['Ação', 'Aventura', 'Stealth', 'Remaster'],
-    price: 79.00,
-    image: "/images/products/Assassin's-Creed-Rogue.webp",
-    badge: "GAME PASS",
-    rating: 4.3
-  },
-  {
-    id: 6,
-    name: "Assassin's Creed Syndicate",
-    category: Category.GAMES,
-    tags: ['Ação', 'Aventura', 'Stealth', '60 FPS'],
-    price: 89.95,
-    image: "/images/products/Assassin's-Creed-Syndicate.webp",
-    badge: "GAME PASS",
-    rating: 4.4
-  },
-  {
-    id: 7,
-    name: "Assassin's Creed Unity",
-    category: Category.GAMES,
-    tags: ['Ação', 'Aventura', 'Stealth', 'Co-op'],
-    price: 99.00,
-    image: "/images/products/Assassin's-Creed-Unity.webp",
-    badge: "GAME PASS",
-    rating: 4.2
-  },
-  {
-    id: 8,
-    name: "Assassin's Creed III Remastered",
-    category: Category.GAMES,
-    tags: ['Ação', 'Aventura', 'Stealth', 'Remaster'],
-    price: 129.00,
-    image: "/images/products/Assassin's-Creed-III.webp",
-    badge: "GAME PASS",
-    rating: 4.3
-  },
-  {
-    id: 9,
-    name: "Assassin's Creed Origins",
-    category: Category.GAMES,
-    tags: ['RPG', 'Ação', 'Aventura', 'Egito'],
-    price: 199.00,
-    image: "/images/products/Assassin's-Creed-Origins.webp",
-    badge: "GAME PASS",
-    rating: 4.8
-  },
-  {
-    id: 10,
-    name: "Assassin's Creed IV Black Flag",
-    category: Category.GAMES,
-    tags: ['Ação', 'Aventura', 'Piratas', 'Naval'],
-    price: 99.00,
-    image: "/images/products/Assassin's-Creed-IV-Black-Flag.webp",
-    badge: "GAME PASS",
-    rating: 4.9
-  },
-  {
     id: 11,
     name: "Leaper Pulse Unit",
     category: Category.CRAFTING_ITEMS,
@@ -554,7 +454,5 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const CATEGORIES = [
-  { id: Category.GAMES, name: 'Jogos' },
-  { id: Category.GIFT_CARDS, name: 'Gift Cards' },
-  { id: Category.CRAFTING_ITEMS, name: 'Itens de Crafting' },
+  { id: Category.CRAFTING_ITEMS, name: 'Itens de Crafting' }
 ];
