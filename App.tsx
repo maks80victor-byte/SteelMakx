@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
@@ -11,6 +11,10 @@ import { Footer } from './components/Footer';
 import { Home } from './components/Home';
 import { PrivacyPolicyPage } from './components/PrivacyPolicyPage';
 import { Product, CartItem } from './types';
+import { supabase } from './lib/supabase';
+import { User } from '@supabase/supabase-js';
+
+import { PaymentModal } from './components/PaymentModal';
 
 function App() {
   const navigate = useNavigate();
@@ -20,8 +24,31 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
 
+  // Payment State
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const [preferenceId, setPreferenceId] = useState<string | null>(null);
+
   // Search State
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Auth State
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    // Listen for changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Modals State
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -73,16 +100,18 @@ function App() {
         body: JSON.stringify({ items: cart }),
       });
 
-      const { url, error } = await response.json();
+      const { preferenceId, error } = await response.json();
 
       if (error) throw new Error(error);
 
-      if (url) {
-        window.location.href = url;
+      if (preferenceId) {
+        setPreferenceId(preferenceId);
+        setIsPaymentOpen(true);
+        setIsCartOpen(false); // Close cart drawer
       }
     } catch (error: any) {
       console.error('Checkout error:', error);
-      alert('Erro ao processar checkout: ' + (error.message || 'Error desconhecido'));
+      alert('Erro ao iniciar pagamento: ' + (error.message || 'Error desconhecido'));
     } finally {
       setIsCheckoutLoading(false);
     }
@@ -100,6 +129,7 @@ function App() {
         onOpenCart={() => setIsCartOpen(true)}
         onSearch={setSearchQuery}
         onOpenLogin={() => setIsLoginOpen(true)}
+        user={user}
       />
 
       <CartDrawer
@@ -110,6 +140,12 @@ function App() {
         onRemove={removeFromCart}
         onCheckout={handleCheckout}
         isCheckoutLoading={isCheckoutLoading}
+      />
+
+      <PaymentModal
+        isOpen={isPaymentOpen}
+        onClose={() => setIsPaymentOpen(false)}
+        preferenceId={preferenceId}
       />
 
       <LoginModal
